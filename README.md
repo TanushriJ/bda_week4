@@ -2,7 +2,7 @@
 
 Features
 - Edges
-  - histograms & summaries (mean, mode, var, skew, kurtisis)
+  - histograms & summaries (mean, mode, variance, skew, kurtisis)
   - spectral analysis
 - 
   
