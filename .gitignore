@@ -37,3 +37,7 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# project specific
+facial-expressions-bda-2021/
+setup.R
