@@ -1,2 +1,11 @@
 # bda_week4
-BDA Competition No.4
+
+Features
+- Edges
+  - histograms & summaries (mean, mode, var, skew, kurtisis)
+  - spectral analysis
+- 
+  
+Models
+- SVM
+- boosted trees
