@@ -7,20 +7,24 @@ output: html_document
 ## Importing packages
 
 library(tidyverse) # metapackage with lots of helpful functions
-library(png) # package that can be used to read png image files in a simple format
+library(png)       # package that can be used to read png image files in a simple format
+library(parallel)
+suppressMessages(require(caret))
+suppressMessages(library(doParallel))
 
-## Reading in files
-
+KAGGLE_RUN = FALSE
 # You can access files the "../input/" directory.
 # You can see the files by running  
-
-list.files(path = "../input/")
 ```
 
 ```{r}
 # Show the availabe directories
-dirs = dir("../input", pattern="[^g]$", recursive=TRUE, include.dirs = TRUE, full.names = TRUE)
-dirs
+if (KAGGLE_RUN){
+  list.files(path = "../input/")
+  dirs = dir("../input", pattern="[^g]$", recursive=TRUE, include.dirs = TRUE, full.names = TRUE)
+} else {
+  dirs = dir(pattern="[^g]$", recursive=TRUE, include.dirs = TRUE, full.names = TRUE)
+}
 ```
 
 ```{r}
@@ -41,11 +45,13 @@ str(test_im)
 The pictures (video stills) show faces that were captured while more or less spontaneously expressing an emotion. Some of the images are repeated, but then shifted, rotated, or both. Not all are easy to classify:
 
 ```{r}
-ok = file.copy(  happy[60], "happy.png", overwrite = TRUE)
-ok = file.copy(    sad[61],   "sad.png", overwrite = TRUE)
-ok = file.copy(  anger[61], "anger.png", overwrite = TRUE)
-ok = file.copy(disgust[61], "disgust.png", overwrite = TRUE)
-IRdisplay::display_html('<img src="happy.png" width="200" style="float:left" /><img src="sad.png" width="200" style="float:left" /><img src="anger.png" width="200" style="float:left" /><img src="disgust.png" width="200" style="float:left" />')
+if (KAGGLE_RUN){
+  ok = file.copy(  happy[60], "happy.png", overwrite = TRUE)
+  ok = file.copy(    sad[61],   "sad.png", overwrite = TRUE)
+  ok = file.copy(  anger[61], "anger.png", overwrite = TRUE)
+  ok = file.copy(disgust[61], "disgust.png", overwrite = TRUE)
+  IRdisplay::display_html('<img src="happy.png" width="200" style="float:left" /><img src="sad.png" width="200" style="float:left" /><img src="anger.png" width="200" style="float:left" /><img src="disgust.png" width="200" style="float:left" />')
+}
 ```
 
 Clearly the first is a happy face, but is the second a sad face, an angry face, or both?
@@ -294,11 +300,6 @@ We'll consider classification trees and random forests here. Random forests are 
 As an example, here we fit a classification tree, using the pixel based approach.
 
 ```{r}
-suppressMessages(require(caret))
-
-## Use multiple cores whenever possible
-library(parallel)
-suppressMessages(library(doParallel))
 (detectCores() - 1) %>% makeCluster() %>% registerDoParallel()
 
 
